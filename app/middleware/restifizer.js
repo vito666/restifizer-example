@@ -53,4 +53,6 @@ module.exports = (app) => {
 
 // eslint-disable-next-line global-require
   restifizer.addController(require('../controllers/user.controller'));
+  // eslint-disable-next-line global-require
+  restifizer.addController(require('../controllers/pet.controller'));
 };
