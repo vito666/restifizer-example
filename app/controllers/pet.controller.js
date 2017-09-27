@@ -23,7 +23,6 @@ class PetController extends BaseController {
         }),
       },
     });
-
     super(options);
   }
 }
