@@ -22,7 +22,7 @@ describe('User profile', () => {
         .post(`${config.baseUrl}/api/users`, _.assign({}, user, specHelper.getClientAuth()))
         .then((result) => {
           response = result;
-        }));
+        })); 
 
     it('should return status 201', () => expect(response).to.have.status(201));
 
