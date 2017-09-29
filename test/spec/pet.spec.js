@@ -11,7 +11,9 @@ const expect = chakram.expect;
 describe("Pet", () => {
   const user = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
   const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.PET);
-  const dog = Object.assign({species: 'dog'}, pet);
+  const dog = Object.assign({
+    species: 'dog'
+  }, pet);
   before('Create and sign in User', () => {
     return specHelper.createUser(user)
       .then(() => specHelper.signInUser(user));
@@ -23,8 +25,11 @@ describe("Pet", () => {
     before('send post', () => chakram
       .post(
         `${config.baseUrl}/api/pets`,
-        dog,
-        {headers: {Authorization: `Bearer ${user.auth.access_token}`}}
+        dog, {
+          headers: {
+            Authorization: `Bearer ${user.auth.access_token}`
+          }
+        }
       )
       .then((result) => {
         response = result;
@@ -43,8 +48,11 @@ describe("Pet", () => {
 
     before('send request', () => chakram
       .get(
-        `${config.baseUrl}/api/pets`,
-        {headers: {Authorization: `Bearer ${user.auth.access_token}`}}
+        `${config.baseUrl}/api/pets`, {
+          headers: {
+            Authorization: `Bearer ${user.auth.access_token}`
+          }
+        }
       )
       .then((result) => {
         response = result;
@@ -64,9 +72,10 @@ describe("Pet", () => {
 
     before('send request', () => chakram
       .get(
-        `${config.baseUrl}/api/pets/${dog._id}`,
-        {
-          headers: {Authorization: `Bearer ${user.auth.access_token}`}
+        `${config.baseUrl}/api/pets/${dog._id}`, {
+          headers: {
+            Authorization: `Bearer ${user.auth.access_token}`
+          }
         }
       )
       .then((result) => {
@@ -89,66 +98,67 @@ describe("Pet", () => {
 
 
   describe('PATCH /pets', () => {
-    it('Should update dogs name', () => {
-      const NEW_VALUE = 'new-username';
-      //const NEW_SPECIES = 'new-species';
 
-      let response;
+    const NEW_VALUE = 'new-username';
+    //const NEW_SPECIES = 'new-species';
 
-      before('send request', () => chakram
-        .patch(`${config.baseUrl}/api/pets/${dogs._id}`, {
-          name: NEW_VALUE,
-          //species: NEW_SPECIES,
-        }, {
-          headers: {
-            Authorization: `Bearer ${user.auth.access_token}`,
-          },
-        })
-        .then((result) => {
-          response = result;
-        }));
+    let response;
 
-      it('should return status 200', () => {
-        expect(response).to.have.status(200);
-      });
+    before('send request', () => chakram
+      .patch(`${config.baseUrl}/api/pets/${dog._id}`, {
+        name: NEW_VALUE,
+        //species: NEW_SPECIES,
+      }, {
+        headers: {
+          Authorization: `Bearer ${user.auth.access_token}`,
+        },
+      })
+      .then((result) => {
+        response = result;
+      }));
 
-      it('should change name', () => {
-        expect(response).to.have.json('name', NEW_VALUE);
-      });
-      /*
-       it('should change species', () => {
-       expect(response).to.have.json('name', NEW_SPECIES);
-       });
-       */
+    it('should return status 200', () => {
+      expect(response).to.have.status(200);
     });
+
+    it('should change name', () => {
+      expect(response).to.have.json('name', NEW_VALUE);
+    });
+    /*
+     it('should change species', () => {
+     expect(response).to.have.json('name', NEW_SPECIES);
+     });
+     */
+
   });
 
   describe('PATCH /pets', () => {
-    it('Should not update dogs species with invalid data', () => {
-      const NEW_SPECIES = 'monkey';
-      //const NEW_VALUE = 'name';
 
-      let response;
+    const NEW_SPECIES = 'monkey';
+    //const NEW_VALUE = 'name';
 
-      before('send request', () => chakram
-        .patch(`${config.baseUrl}/api/pets/me`, {
-          species: NEW_SPECIES,
-        }, {
-          headers: {
-            Authorization: `Bearer ${user.auth.access_token}`,
-          },
-        })
-        .then((result) => {
-          response = result;
-        }));
+    let response;
 
-      it('should not return status 200', () => {
-        expect(response).to.have.status(200);
-      });
-      it('should return status 400', () => {
-        expect(response).to.have.status(400);
-      });
+    before('send request', () => chakram
+      .patch(`${config.baseUrl}/api/pets/${dog._id}`, {
+        species: NEW_SPECIES,
+      }, {
+        headers: {
+          Authorization: `Bearer ${user.auth.access_token}`,
+        },
+      })
+      .then((result) => {
+        response = result;
+      console.log(dog);
+      }));
+
+    it('should not return status 200', () => {
+      expect(response).not.to.have.status(200);
     });
+    it('should return status 400', () => {
+      expect(response).to.have.status(400);
+    });
+
   });
 
 
@@ -156,12 +166,11 @@ describe("Pet", () => {
     let response;
 
     before('send request', () => chakram
-      .delete(`${config.baseUrl}/api/pets/${dog._id}`,
-        {}, {
-          headers: {
-            Authorization: `Bearer ${user.auth.access_token}`,
-          },
-        })
+      .delete(`${config.baseUrl}/api/pets/${dog._id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${user.auth.access_token}`,
+        },
+      })
 
       .then((result) => {
         response = result;
