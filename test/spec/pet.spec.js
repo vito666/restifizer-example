@@ -8,17 +8,19 @@ const specHelper = require('../spec-helper');
 
 const expect = chakram.expect;
 
-describe("Pet profile",() => {
-  const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
+describe("Pet profile", () => {
+  const user = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
+  
+//  const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
 
   describe('POST /pets', () => {
     let response;
 
     before('send post', () => chakram
-           .post(`/pets`) 
-           .then((result) => {
-      response = result;
-    }));
+      .post(`${config.baseUrl}/api/pets`)
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 201', () => expect(response).to.have.status(201));
 
@@ -34,21 +36,17 @@ describe("Pet profile",() => {
     let response;
 
     before('send request', () => chakram
-           .get(`${config.baseUrl}/api/pets/me`, {
-      headers: {
-        Authorization: `Bearer ${pet.auth.access_token}`,
-      },
-    })
-           .then((result) => {
-      response = result;
-    }));
+      .get(`${config.baseUrl}/api/pets/me`)
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 200', () => {
       expect(response).to.have.status(200);
     });
 
     it('should be the same _id', () => {
-      expect(response).to.have.json('_id', user._id);
+      expect(response).to.have.json('_id', pet._id);
     });
 
     it('should be the same username', () => {
@@ -57,15 +55,45 @@ describe("Pet profile",() => {
   });
 
   describe('PATCH /pets', () => {
-    it('Should create new pet', () =>{
+    it('Should create new pet', () => {
+      const NEW_VALUE = 'new-username';
 
-    }); 
+      let response;
+
+      before('send request', () => chakram
+        .patch(`${config.baseUrl}/api/pets/me`, {
+          name: NEW_VALUE,
+        }, {
+          headers: {
+            Authorization: `Bearer ${user.auth.access_token}`,
+          },
+        })
+        .then((result) => {
+          response = result;
+        }));
+
+      it('should return status 200', () => {
+        expect(response).to.have.status(200);
+      });
+
+      it('should change username', () => {
+        expect(response).to.have.json('name', NEW_VALUE);
+      });
+    });
   });
 
   describe('DELETE /pets', () => {
-    it('Should create new pet', () =>{
+    let response;
 
-    }); 
+    before('send request', () => chakram
+      .delete(`${config.baseUrl}/api/pets/me`)
+      .then((result) => {
+        response = result;
+      }));
+
+    it('should return status 204', () => {
+      expect(response).to.have.status(204);
+    });
   });
 
 })
