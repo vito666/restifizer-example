@@ -19,7 +19,7 @@ describe('User profile', () => {
     let response;
 
     before('send post', () => chakram
-        .post(`${config.baseUrl}/api/users`, _.assign({}, user, specHelper.getClientAuth()))
+        .post(`${config.baseUrl}/api/users`, Object.assign({}, user, specHelper.getClientAuth()))
         .then((result) => {
           response = result;
         })); 

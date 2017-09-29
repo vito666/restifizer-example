@@ -9,13 +9,14 @@ const Bb = require('bluebird');
 const request = require('request-promise');
 
 const User = require('../app/models/user.server.model');
-const Pet = require('../app/models/pet.server.model')
+const Pet = require('../app/models/pet.server.model');
 const AccessToken = require('../app/models/access-token.server.model');
 const RefreshToken = require('../app/models/refresh-token.server.model');
 const testConfig = require('./config');
 
 const FIXTURE_TYPES = {
   USER: 'user.data',
+  PET: 'pet.data',
 };
 
 const clientAuth = {
@@ -132,7 +133,15 @@ const specHelper = {
     return Bb
       .try(() => {
         if (data._id) {
-          return User.remove({ _id: data._id });
+          return User.remove({_id: data._id});
+        }
+      });
+  },
+  removePet(data) {
+    return Bb
+      .try(() => {
+        if (data._id) {
+          return Pet.remove({_id: data._id});
         }
       });
   },
@@ -140,9 +149,10 @@ const specHelper = {
 
 before(() => Bb
   .join(
-    User.remove({ username: { $ne: testConfig.adminUser.username } }),
+    User.remove({username: {$ne: testConfig.adminUser.username}}),
     AccessToken.remove(),
-    RefreshToken.remove()
+    RefreshToken.remove(),
+    Pet.remove()
   ));
 
 module.exports = specHelper;
