@@ -9,6 +9,7 @@ const Bb = require('bluebird');
 const request = require('request-promise');
 
 const User = require('../app/models/user.server.model');
+const Pet = require('../app/models/pet.server.model')
 const AccessToken = require('../app/models/access-token.server.model');
 const RefreshToken = require('../app/models/refresh-token.server.model');
 const testConfig = require('./config');

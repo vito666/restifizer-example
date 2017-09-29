@@ -11,7 +11,7 @@ const expect = chakram.expect;
 describe("Pet profile", () => {
   const user = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
   
-//  const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
+  const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
 
   describe('POST /pets', () => {
     let response;
@@ -95,5 +95,21 @@ describe("Pet profile", () => {
       expect(response).to.have.status(204);
     });
   });
+});
 
+describe("CHEck /pets", () => {
+  
+  it("Should create new pet", () => {
+    
+    .post('/pets')
+    .expect(200)
+    .expect((res) => {
+      expect(res.body)
+    })
+    .end((err,res) => {
+      if (err) {
+        return done(err);
+      }
+    }) 
+  });
 })
