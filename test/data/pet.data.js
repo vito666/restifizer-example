@@ -6,6 +6,6 @@
 
 module.exports = seed => (
   {
-    name: `fakeUsername${seed}`,
+    name: `fakeName${seed}`,
   }
 );

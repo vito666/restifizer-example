@@ -14,15 +14,16 @@ const expect = chakram.expect;
 
 describe('User profile', () => {
   const user = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
+  const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.PET);
 
   describe('Sign up', () => {
     let response;
 
     before('send post', () => chakram
-        .post(`${config.baseUrl}/api/users`, Object.assign({}, user, specHelper.getClientAuth()))
-        .then((result) => {
-          response = result;
-        })); 
+      .post(`${config.baseUrl}/api/users`, Object.assign({}, user, specHelper.getClientAuth()))
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 201', () => expect(response).to.have.status(201));
 
@@ -38,15 +39,15 @@ describe('User profile', () => {
     let response;
 
     before('send request', () => chakram
-        .get(`${config.baseUrl}/api/users`,
+      .get(`${config.baseUrl}/api/users`,
       {
         headers: {
           Authorization: `Bearer ${user.auth.access_token}`,
         },
       })
-        .then((result) => {
-          response = result;
-        }));
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 200', () => {
       expect(response).to.have.status(200);
@@ -57,15 +58,15 @@ describe('User profile', () => {
     let response;
 
     before('send request', () => chakram
-        .get(`${config.baseUrl}/api/users/me`,
+      .get(`${config.baseUrl}/api/users/me`,
       {
         headers: {
           Authorization: `Bearer ${user.auth.access_token}`,
         },
       })
-        .then((result) => {
-          response = result;
-        }));
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 200', () => {
       expect(response).to.have.status(200);
@@ -86,7 +87,7 @@ describe('User profile', () => {
     let response;
 
     before('send request', () => chakram
-        .patch(`${config.baseUrl}/api/users/me`,
+      .patch(`${config.baseUrl}/api/users/me`,
       {
         username: NEW_VALUE,
       },
@@ -95,10 +96,10 @@ describe('User profile', () => {
           Authorization: `Bearer ${user.auth.access_token}`,
         },
       }
-        )
-        .then((result) => {
-          response = result;
-        }));
+      )
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 200', () => {
       expect(response).to.have.status(200);
@@ -109,26 +110,65 @@ describe('User profile', () => {
     });
   });
 
-  describe('Remove Profile', () => {
+  describe('Change /pets Id', () => {
+    pet.species = 'dog';
+
     let response;
+    before('send request', () => chakram
+        .post(
+          `${config.baseUrl}/api/pets`,
+          pet, {
+            headers: {
+              Authorization: `Bearer ${user.auth.access_token}`,
+            },
+          }
+        ).then((result) => {
+          pet._id = result.body._id;
+        }));
 
     before('send request', () => chakram
-        .delete(`${config.baseUrl}/api/users/me`,
-          {},
+      .patch(`${config.baseUrl}/api/users/me`,
+      {
+        pets: [pet._id],
+      },
       {
         headers: {
           Authorization: `Bearer ${user.auth.access_token}`,
         },
       }
-        )
-        .then((result) => {
-          response = result;
-        }));
+      )
+      .then((result) => {
+        response = result;
+      }));
+
+    it('should return status 200', () => {
+      expect(response).to.have.status(200);
+    });
+
+    it('should change /pets Id', () => {
+      expect(response.body.pets[0]).to.be.equal(pet._id);
+    });
+  });
+
+  describe('Remove Profile', () => {
+    let response;
+
+    before('send request', () => chakram
+      .delete(`${config.baseUrl}/api/users/me`,
+        {},
+      {
+        headers: {
+          Authorization: `Bearer ${user.auth.access_token}`,
+        },
+      }
+      )
+      .then((result) => {
+        response = result;
+      }));
 
     it('should return status 204', () => {
       expect(response).to.have.status(204);
     });
   });
-
   after('remove user', () => specHelper.removeUser(user));
 });

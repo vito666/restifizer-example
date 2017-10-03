@@ -1,4 +1,4 @@
- /**
+/**
  * Created by vedi on 23/08/14.
  */
 
@@ -29,6 +29,10 @@ const schema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  pets: [
+    { type: mongoose.Schema.Types.ObjectId,
+      ref: 'Pet' },
+  ],
   userpic: mongoose.Schema.Types.Mixed,
   userpicLocal: mongoose.Schema.Types.Mixed,
   userpicFtp: mongoose.Schema.Types.Mixed,

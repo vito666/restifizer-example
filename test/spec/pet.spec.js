@@ -8,11 +8,11 @@ const specHelper = require('../spec-helper');
 
 const expect = chakram.expect;
 
-describe("Pet", () => {
+describe('Pet', () => {
   const user = specHelper.getFixture(specHelper.FIXTURE_TYPES.USER);
   const pet = specHelper.getFixture(specHelper.FIXTURE_TYPES.PET);
   const dog = Object.assign({
-    species: 'dog'
+    species: 'dog',
   }, pet);
   before('Create and sign in User', () => {
     return specHelper.createUser(user)
@@ -27,8 +27,8 @@ describe("Pet", () => {
         `${config.baseUrl}/api/pets`,
         dog, {
           headers: {
-            Authorization: `Bearer ${user.auth.access_token}`
-          }
+            Authorization: `Bearer ${user.auth.access_token}`,
+          },
         }
       )
       .then((result) => {
@@ -50,8 +50,8 @@ describe("Pet", () => {
       .get(
         `${config.baseUrl}/api/pets`, {
           headers: {
-            Authorization: `Bearer ${user.auth.access_token}`
-          }
+            Authorization: `Bearer ${user.auth.access_token}`,
+          },
         }
       )
       .then((result) => {
@@ -74,8 +74,8 @@ describe("Pet", () => {
       .get(
         `${config.baseUrl}/api/pets/${dog._id}`, {
           headers: {
-            Authorization: `Bearer ${user.auth.access_token}`
-          }
+            Authorization: `Bearer ${user.auth.access_token}`,
+          },
         }
       )
       .then((result) => {
@@ -98,9 +98,8 @@ describe("Pet", () => {
 
 
   describe('PATCH /pets', () => {
-
     const NEW_VALUE = 'new-username';
-    //const NEW_SPECIES = 'new-species';
+    // const NEW_SPECIES = 'new-species';
 
     let response;
 
@@ -129,13 +128,11 @@ describe("Pet", () => {
      expect(response).to.have.json('name', NEW_SPECIES);
      });
      */
-
   });
 
-  describe('PATCH /pets', () => {
-
+  describe('PATCH /pets(monkey case)', () => {
     const NEW_SPECIES = 'monkey';
-    //const NEW_VALUE = 'name';
+    // const NEW_VALUE = 'name';
 
     let response;
 
@@ -149,7 +146,6 @@ describe("Pet", () => {
       })
       .then((result) => {
         response = result;
-      console.log(dog);
       }));
 
     it('should not return status 200', () => {
@@ -158,7 +154,6 @@ describe("Pet", () => {
     it('should return status 400', () => {
       expect(response).to.have.status(400);
     });
-
   });
 
 

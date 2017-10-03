@@ -21,6 +21,7 @@ class UserController extends BaseController {
         'username',
         'password',
         'createdAt',
+        'pets',
         'userpic',
         'userpicUrl',
         'userpicLocal',
